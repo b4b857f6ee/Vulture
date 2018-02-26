@@ -2,6 +2,8 @@
 The goal of this application is to provide a sourcetype for Splunk using the log of the WAF Vulture from the MongoDB Repository of the appliance
 This application provide you the same dashboard you can found on the appliance directly.
 
+Vulture project : https://www.vultureproject.org/
+
 Installation
 
 Connect to your splunk installation
