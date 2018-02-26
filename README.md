@@ -4,7 +4,7 @@ This application provide you the same dashboard you can found on the appliance d
 
 Vulture project : https://www.vultureproject.org/
 
-Installation
+# Splunk - Installation
 
 Connect to your splunk installation
 
@@ -31,8 +31,8 @@ unzip master.zip
   
  That's it for the Splunk configuration
  
- # Vulture Configuration
  
+ # Vulture Configuration
  
 Log configuration
 
