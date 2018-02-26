@@ -1,0 +1,209 @@
+<form>
+  <label>vulture_security</label>
+  <description>Timeline</description>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="time" token="TimeInterval">
+      <label>Heure</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="multiselect" token="Vulture_Appliance" searchWhenChanged="true">
+      <label>Vulture Appliance</label>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>index=vulture | stats count by host</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <default>*</default>
+      <delimiter>  OR </delimiter>
+      <choice value="*">Tous</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>host="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+    </input>
+    <input type="multiselect" token="Web_Application" searchWhenChanged="true">
+      <label>Application Web</label>
+      <choice value="*">Tous</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>app_name="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+      <fieldForLabel>app_name</fieldForLabel>
+      <fieldForValue>app_name</fieldForValue>
+      <search>
+        <query>index=vulture $Vulture_Appliance$ | stats count by app_name</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <default>*</default>
+    </input>
+    <input type="multiselect" token="Search_IP_SRC" searchWhenChanged="true">
+      <label>IP Source</label>
+      <choice value="*">Tous</choice>
+      <default>*</default>
+      <fieldForLabel>src_ip</fieldForLabel>
+      <fieldForValue>src_ip</fieldForValue>
+      <search>
+        <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by src_ip</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <initialValue>*</initialValue>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>src_ip="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+      <delimiter> OR </delimiter>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Number of hits by status code</title>
+      <chart>
+        <title>Number of hits by status code</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_IP_SRC$ | timechart count by http_code</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>HTTP status codes</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by http_code</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>HTTP methods</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by http_method</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <chart>
+        <title>HTTP by user agent</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by user_agent</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Traffic per URL</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by requested_uri,app_name</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Average bytes received by request</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | timechart count by bytes_received</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Average bytes send per request</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | timechart count by bytes_send</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <chart>
+        <title>Reputation</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by reputation</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Reputation per IP</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by reputation,src_ip</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Reputation by requested uri</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by reputation,requested_uri</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </table>
+    </panel>
+  </row>
+</form>

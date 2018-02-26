@@ -1,0 +1,10 @@
+<nav search_view="search" color="#3A3939">
+  <view name="vulture_maps" default='true' />
+<collection label="Reporting">
+  <view name="vulture_maps" />
+  <view name="vulture_access" />
+  <view name="vulture_security" />
+</collection>
+<a href="https://www.vultureproject.org/">Vulture WebSite</a>
+<a href="https://www.vultureproject.org/changelog/">Last Version</a>
+</nav>
