@@ -23,7 +23,8 @@ unzip master.zip
  restart splunk
  
  Create a new input (in my case port 9601 and UDP protocol you can change it)
-  Go to Settings -> Data inputs -> UDP -> Add New
+ 
+ Go to Settings -> Data inputs -> UDP -> Add New
   Select your port "9601" and the Source Type as vulture and the index as vulture
   
  That's it for the Splunk configuration
