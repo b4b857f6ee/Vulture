@@ -6,6 +6,8 @@ Installation
 
 Connect to your splunk installation
 
+create a index call "vulture"
+
 cd $HOME_SPLUNK/etc/apps
 
 wget https://github.com/b4b857f6ee/Splunk_Vulture/archive/master.zip
