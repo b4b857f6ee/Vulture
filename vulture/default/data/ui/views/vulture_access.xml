@@ -1,11 +1,11 @@
 <form>
-  <label>Report / Map</label>
+  <label>Report / Access</label>
   <description>Timeline</description>
   <fieldset submitButton="true" autoRun="true">
     <input type="time" token="TimeInterval">
       <label>Heure</label>
       <default>
-        <earliest>-15m</earliest>
+        <earliest>@d</earliest>
         <latest>now</latest>
       </default>
     </input>
@@ -27,7 +27,7 @@
       <valueSuffix>"</valueSuffix>
     </input>
     <input type="multiselect" token="Web_Application" searchWhenChanged="true">
-      <label>Applications</label>
+      <label>Application Web</label>
       <choice value="*">Tous</choice>
       <prefix>(</prefix>
       <suffix>)</suffix>
@@ -42,93 +42,34 @@
         <latest>now</latest>
       </search>
       <default>*</default>
-      <initialValue>*</initialValue>
-    </input>
-    <input type="multiselect" token="Search_Status_Codes" searchWhenChanged="true">
-      <label>Status codes</label>
-      <choice value="*">Tous</choice>
-      <default>*</default>
-      <fieldForLabel>http_code</fieldForLabel>
-      <fieldForValue>http_code</fieldForValue>
-      <search>
-        <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by http_code</query>
-        <earliest>-24h@h</earliest>
-        <latest>now</latest>
-      </search>
-      <prefix>(</prefix>
-      <suffix>)</suffix>
-      <valuePrefix>http_code="</valuePrefix>
-      <valueSuffix>"</valueSuffix>
-      <delimiter> OR </delimiter>
-    </input>
-    <input type="multiselect" token="Search_Reputations" searchWhenChanged="true">
-      <label>Reputations</label>
-      <choice value="*">Tous</choice>
-      <default>*</default>
-      <prefix>(</prefix>
-      <suffix>)</suffix>
-      <initialValue>*</initialValue>
-      <valuePrefix>reputation="</valuePrefix>
-      <valueSuffix>"</valueSuffix>
-      <delimiter> OR </delimiter>
-      <fieldForLabel>reputation</fieldForLabel>
-      <fieldForValue>reputation</fieldForValue>
-      <search>
-        <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ | stats count by reputation</query>
-        <earliest>-24h@h</earliest>
-        <latest>now</latest>
-      </search>
     </input>
   </fieldset>
   <row>
     <panel>
-      <title>Request by country number</title>
-      <map>
-        <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | iplocation src_ip | stats count by Country | geom geo_countries featureIdField="Country"</query>
-          <earliest>$TimeInterval.earliest$</earliest>
-          <latest>$TimeInterval.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="height">687</option>
-        <option name="mapping.type">choropleth</option>
-        <option name="refresh.display">progressbar</option>
-      </map>
-    </panel>
-  </row>
-  <row>
-    <panel>
-      <title>Country</title>
+      <title>Number of hits by status code</title>
       <chart>
         <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | iplocation src_ip | stats count by Country</query>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | timechart count by http_code</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
-        <option name="charting.chart">column</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">line</option>
         <option name="charting.drilldown">none</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="height">596</option>
         <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
-    <panel>
-      <title>Request by country</title>
-      <table>
-        <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | iplocation src_ip | stats count by Country | geom geo_countries featureIdField="Country" | fields Country count</query>
-          <earliest>$TimeInterval.earliest$</earliest>
-          <latest>$TimeInterval.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="refresh.display">progressbar</option>
-      </table>
-    </panel>
   </row>
   <row>
     <panel>
-      <title>Request by website</title>
+      <title>HTTP status codes</title>
       <chart>
         <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | stats count by app_name</query>
+          <query>$Vulture_Appliance$ $Web_Application$ | stats count by http_code</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
@@ -138,14 +79,103 @@
       </chart>
     </panel>
     <panel>
-      <title>Request by website</title>
+      <title>HTTP methods</title>
       <chart>
         <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | stats count by app_name</query>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | stats count by http_method</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
-        <option name="charting.chart">column</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Browsers</title>
+      <chart>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | rex field=user_agent "(?&lt;browser&gt;(MSIE|(?!Gecko.+)Firefox|(?!AppleWebKit.+Chrome.+)Safari|(?!AppleWebKit.+)Chrome|AppleWebKit(?!.+Chrome|.+Safari)|Gecko(?!.+Firefox)))(?: |\/)([\d\.apre]+)" | search browser="*" | stats count by browser</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Operating Systems</title>
+      <chart>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | rex field=user_agent "\((?P&lt;os&gt;[^;]+);(?P&lt;vers&gt;[^;)]+).*$" | search os=* | rex field=os "(?&lt;os2&gt;^\S*)" | search os2=* | stats count by os2</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Traffic per URL</title>
+      <table>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ app_name!="-" | stats count by requested_uri,app_name</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="drilldown">none</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Average bytes received per request</title>
+      <chart>
+        <title>in kiloBytes</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | eval Kilobyte_received = bytes_received/100  | timechart span=5m avg(Kilobyte_received) as kiloBytes</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Average bytes sent per request</title>
+      <chart>
+        <title>in kiloBytes</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ | eval Kilobyte_sent = bytes_sent/100  | timechart span=5m avg(Kilobyte_sent) as kiloBytes</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Average time elapsed per request</title>
+      <chart>
+        <title>Average time elapsed per request</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$  | eval Time_Elapsed = time_elapsed/1000000 | timechart span=5m avg(Time_Elapsed) as Time_elapsed</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.chart">area</option>
         <option name="charting.drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </chart>
