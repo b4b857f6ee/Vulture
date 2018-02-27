@@ -82,14 +82,15 @@
   </fieldset>
   <row>
     <panel>
+      <title>Request by country number</title>
       <map>
-        <title>Request by country number</title>
         <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$  | iplocation src_ip | stats count by Country | geom geo_countries featureIdField="Country"</query>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | iplocation src_ip | stats count by Country | geom geo_countries featureIdField="Country"</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
         <option name="drilldown">none</option>
+        <option name="height">687</option>
         <option name="mapping.type">choropleth</option>
         <option name="refresh.display">progressbar</option>
       </map>
@@ -97,25 +98,10 @@
   </row>
   <row>
     <panel>
-      <map>
-        <title>Request by country</title>
-        <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ | iplocation src_ip | geostats latfield=lat longfield=lon count</query>
-          <earliest>$TimeInterval.earliest$</earliest>
-          <latest>$TimeInterval.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="mapping.type">marker</option>
-        <option name="refresh.display">progressbar</option>
-      </map>
-    </panel>
-  </row>
-  <row>
-    <panel>
+      <title>Country</title>
       <chart>
-        <title>Country</title>
         <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ | iplocation src_ip | stats count by Country</query>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | iplocation src_ip | stats count by Country</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
@@ -124,34 +110,45 @@
         <option name="refresh.display">progressbar</option>
       </chart>
     </panel>
-  </row>
-  <row>
     <panel>
-      <map>
-        <title>Requeste by website</title>
-        <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ | iplocation src_ip | geostats latfield=lat longfield=lon count by app_name</query>
-          <earliest>$TimeInterval.earliest$</earliest>
-          <latest>$TimeInterval.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="mapping.type">marker</option>
-        <option name="refresh.display">progressbar</option>
-      </map>
-    </panel>
-  </row>
-  <row>
-    <panel>
+      <title>Request by country</title>
       <table>
-        <title>Request by country</title>
         <search>
-          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ | iplocation src_ip | stats count by Country | geom geo_countries featureIdField="Country" | fields Country count</query>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | iplocation src_ip | stats count by Country | geom geo_countries featureIdField="Country" | fields Country count</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="refresh.display">progressbar</option>
       </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Request by website</title>
+      <chart>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | stats count by app_name</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Request by website</title>
+      <chart>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ $Web_Application$ $Search_Status_Codes$ $Search_Reputations$ app_name!="-" | stats count by app_name</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
     </panel>
   </row>
 </form>
