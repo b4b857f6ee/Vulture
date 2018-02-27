@@ -12,17 +12,17 @@ create a index call "vulture"
 
 cd $HOME_SPLUNK/etc/apps
 
-wget https://github.com/b4b857f6ee/Splunk_Vulture/archive/master.zip
+wget https://github.com/b4b857f6ee/Vulture/archive/master.zip
 
 unzip master.zip
 
- mv Splunk_Vulture-master/vulture ./
+ mv Vulture-master/vulture ./
  
  mv vulture Vulture
  
- rm -rf Splunk_Vulture-master/
+ rm -rf Vulture-master/
  
- chown splunk:splunk -R vulture   (only if your are using Splunk as splunk user and not root)
+ chown splunk:splunk -R Vulture   (only if your are using Splunk as splunk user and not root)
  
  restart splunk
  
