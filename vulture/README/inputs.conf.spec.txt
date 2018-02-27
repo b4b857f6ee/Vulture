@@ -1,0 +1,2 @@
+[vulture://default]
+* Configure an input for getting the data from the vulture appliance

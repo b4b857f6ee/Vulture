@@ -1,0 +1,22 @@
+# Copyright (C) 2013 Luke Murphey. All Rights Reserved.
+#
+# This file contains all possible options for an vulture.conf file.  Use this file to
+# configure how the vulture app functions.
+#
+# To learn more about configuration files (including precedence) please see the documentation
+# located at http://docs.splunk.com/Documentation/latest/Admin/Aboutconfigurationfiles
+
+#******************************************************************************
+# These options must be set under an [default] entry to apply to all inputs
+# Otherwise, the stanza name must be associated with the individual input.
+#******************************************************************************
+
+connection_host = <string>
+    * Defines how the system use for the host, ip address or DNS name resolution.
+    * Examples: "ip", "dns"
+index = <string>
+    * Defines the index that will be used.
+    * Examples: "vulture"
+sourcetype = <string>
+    * Defines the sourcetype that will be used.
+    * Examples: "vulture"

@@ -1,0 +1,4 @@
+[vulture]
+connection_host = ip
+index = vulture
+sourcetype = vulture
