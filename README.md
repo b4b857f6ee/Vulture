@@ -18,6 +18,8 @@ unzip master.zip
 
  mv Splunk_Vulture-master/vulture ./
  
+ mv vulture Vulture
+ 
  rm -rf Splunk_Vulture-master/
  
  chown splunk:splunk -R vulture   (only if your are using Splunk as splunk user and not root)
