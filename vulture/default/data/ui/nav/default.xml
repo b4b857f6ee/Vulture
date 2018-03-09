@@ -5,7 +5,9 @@
   <view name="vulture_access" />
   <view name="vulture_security" />
 </collection>
+<view name="search"/>
+<collection label="Link">
 <a href="https://www.vultureproject.org/">Vulture WebSite</a>
 <a href="https://www.vultureproject.org/changelog/">Last Version</a>
-<a href="https://github.com/b4b857f6ee/Vulture">GitHub</a>
+</collection>
 </nav>
