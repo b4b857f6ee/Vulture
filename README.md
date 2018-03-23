@@ -62,3 +62,29 @@ Restart your application, access to your website and you have to received your l
 Check the splunk index to be sure.
 
 index=vulture
+
+
+# Release Notes
+
+# Version 1.2
+Wrong upload from the version 1.1
+
+# Version 1.1
+March 21, 2018
+
+Splunk App for Vulture WAF
+
+The goal of this application is to provide a sourcetype for Splunk using the log of the WAF Vulture from the MongoDB Repository of the appliance This application provide you the same dashboard you can found on the appliance directly.
+
+Version : 1.1
+
+Installation & support : https://github.com/b4b857f6ee/Vulture
+
+About the Vulture project : https://www.vultureproject.org/
+
+Releases notes 1.1
+
+- Adding the Search menu into the App.
+- Beginning the split sourcetype with vulture:log for web and vulture:filterlog for PacketFilter log aka pflog from the FreeBSD.
+- Modification of the Field by adding alias for the CIM Web Compliance.
+
