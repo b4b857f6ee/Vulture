@@ -11,7 +11,7 @@ Splunk - Configuration
 
 Install this app into Splunk by doing the following:
 
-  1. Log in to Splunk Web and navigate to "Apps » Manage Apps" via the app dropdown at the top left of Splunk's user interface
+  1. Log in to Splunk Web and navigate to "Apps Â» Manage Apps" via the app dropdown at the top left of Splunk's user interface
   2. Click the "install app from file" button
   3. Upload the file by clicking "Choose file" and selecting the app
   4. Click upload
@@ -72,4 +72,4 @@ OR
 
 You can access the source-code and get technical details about the app
 
-  -->  https://github.com/b4b857f6ee/Splunk_Vulture
+  -->  https://github.com/b4b857f6ee/Vulture
