@@ -4,6 +4,7 @@
   <view name="vulture_maps" />
   <view name="vulture_access" />
   <view name="vulture_security" />
+  <view name="vulture_packetfilter" />
 </collection>
 <view name="search"/>
 <collection label="Link">
