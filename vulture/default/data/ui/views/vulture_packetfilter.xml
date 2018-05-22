@@ -1,0 +1,132 @@
+<form>
+  <label>Packet Filter</label>
+  <description>Timeline</description>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="time" token="TimeInterval">
+      <label>Heure</label>
+      <default>
+        <earliest>@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="multiselect" token="Vulture_Appliance" searchWhenChanged="true">
+      <label>Vulture Appliance</label>
+      <fieldForLabel>host</fieldForLabel>
+      <fieldForValue>host</fieldForValue>
+      <search>
+        <query>index=vulture | stats count by host</query>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </search>
+      <default>*</default>
+      <delimiter>  OR </delimiter>
+      <choice value="*">Tous</choice>
+      <prefix>(</prefix>
+      <suffix>)</suffix>
+      <valuePrefix>host="</valuePrefix>
+      <valueSuffix>"</valueSuffix>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>Incoming Packets</title>
+      <chart>
+        <title>Number of hits</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" direction=in | timechart span=1h count(rule) as hits</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="height">281</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Source IP</title>
+      <chart>
+        <title>Top 5</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" | chart count by src_ip | sort - count | head 5</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Destination IP</title>
+      <chart>
+        <title>Top 5</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" | chart count by dest_ip | sort - count | head 5</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Firewall Actions</title>
+      <chart>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" | stats count by action</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Requests per destination ports</title>
+      <chart>
+        <title>Top 5</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog"
+| chart count(action) as hits by dest_port | sort - count | head 5</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.chart">column</option>
+        <option name="charting.drilldown">none</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Outgoing Packets</title>
+      <chart>
+        <title>Number of hits</title>
+        <search>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" direction=on | timechart span=1h count(rule) as hits</query>
+          <earliest>$TimeInterval.earliest$</earliest>
+          <latest>$TimeInterval.latest$</latest>
+        </search>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.legend.mode">standard</option>
+        <option name="charting.legend.placement">top</option>
+        <option name="height">596</option>
+        <option name="refresh.display">progressbar</option>
+      </chart>
+    </panel>
+  </row>
+</form>
