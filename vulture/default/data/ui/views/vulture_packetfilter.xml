@@ -114,7 +114,7 @@
       <chart>
         <title>Number of hits</title>
         <search>
-          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" direction=on | timechart span=1h count(rule) as hits</query>
+          <query>index=vulture $Vulture_Appliance$ sourcetype="vulture:filterlog" direction=outbound | timechart span=1h count(rule) as hits</query>
           <earliest>$TimeInterval.earliest$</earliest>
           <latest>$TimeInterval.latest$</latest>
         </search>
