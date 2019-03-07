@@ -1,4 +1,4 @@
-<form>
+<form theme="dark">
   <label>Packet Filter</label>
   <description>Timeline</description>
   <fieldset submitButton="true" autoRun="true">
